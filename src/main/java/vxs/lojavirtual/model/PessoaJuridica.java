@@ -5,7 +5,7 @@ import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "pessoa_fisica")
+@Table(name = "pessoa_juridica")
 @PrimaryKeyJoinColumn(name = "id")
 public class PessoaJuridica extends Pessoa {
 
