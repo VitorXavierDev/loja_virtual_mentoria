@@ -23,7 +23,6 @@ public abstract class Pessoa implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_pessoa")
 	private Long id;
@@ -34,8 +33,18 @@ public abstract class Pessoa implements Serializable {
 	
 	private String telefone;
 	
-	@OneToMany(mappedBy = "pessoa_id", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "pessoa", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Endereco> enderecos = new ArrayList<Endereco>();
+
+	
+	
+	public List<Endereco> getEnderecos() {
+		return enderecos;
+	}
+
+	public void setEnderecos(List<Endereco> enderecos) {
+		this.enderecos = enderecos;
+	}
 
 	public Long getId() {
 		return id;
