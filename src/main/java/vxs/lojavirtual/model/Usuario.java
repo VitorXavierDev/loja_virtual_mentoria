@@ -42,7 +42,7 @@ public class Usuario implements UserDetails {
 	private Date dataAtualSenha;
 	
 	@OneToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "usuarios_acessos", uniqueConstraints = @UniqueConstraint (columnNames = {"usuario_id", "acesso_id"} ,
+	@JoinTable(name = "usuarios_acesso", uniqueConstraints = @UniqueConstraint (columnNames = {"usuario_id", "acesso_id"} ,
 			name = "unique_acesso_user"), 
 	joinColumns = @JoinColumn(name = "usuario_id", referencedColumnName = "id", table = "usuario", 
 	unique = false, foreignKey = @ForeignKey(name = "usuario_fk", value = ConstraintMode.CONSTRAINT)),
