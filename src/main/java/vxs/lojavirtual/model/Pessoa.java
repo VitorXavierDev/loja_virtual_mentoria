@@ -43,7 +43,7 @@ public abstract class Pessoa implements Serializable {
 	}
 
 	public void setEnderecos(List<Endereco> enderecos) {
-		this.enderecos = enderecos;
+		this.enderecos = enderecos; 
 	}
 
 	public Long getId() {
