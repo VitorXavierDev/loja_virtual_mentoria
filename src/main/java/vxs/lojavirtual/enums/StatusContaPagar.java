@@ -8,6 +8,7 @@ public enum StatusContaPagar {
 	QUITADA("Quitada"),
 	RENEGOCIADA("Renegociada");
 	
+	
 	private String descricao;
 	
 	private StatusContaPagar(String descricao) {
