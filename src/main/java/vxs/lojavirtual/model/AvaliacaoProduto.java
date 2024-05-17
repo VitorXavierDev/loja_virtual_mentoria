@@ -3,6 +3,7 @@ package vxs.lojavirtual.model;
 import java.io.Serializable;
 import java.util.Objects;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
@@ -27,6 +28,10 @@ public class AvaliacaoProduto implements Serializable{
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_avaliacao_produto")
 	private Long id;
 	
+	@Column(nullable = false)
+	private Integer nota;
+	
+	@Column(nullable = false)
 	private String descricao;
 	
 	@ManyToOne(targetEntity = Pessoa.class)
@@ -47,6 +52,14 @@ public class AvaliacaoProduto implements Serializable{
 	}
 
 	
+	public Integer getNota() {
+		return nota;
+	}
+
+	public void setNota(Integer nota) {
+		this.nota = nota;
+	}
+
 	public String getDescricao() {
 		return descricao;
 	}
