@@ -14,54 +14,54 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
-
 @Entity
 @Table(name = "produto")
 @SequenceGenerator(name = "seq_produto", sequenceName = "seq_produto", allocationSize = 1, initialValue = 1)
 public class Produto implements Serializable {
-	
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_produto")
 	private Long id;
-	
+
 	@Column(nullable = false)
 	private String tipoUnidade;
-	
+
 	@Column(nullable = false)
 	private String nome;
-	
+
 	@Column(nullable = false)
 	private Boolean ativo = Boolean.TRUE;
 	
+	@Column(nullable = false)
+	private Double altura;
+
 	@Column(columnDefinition = "text", length = 2000, nullable = false)
 	private String descricao;
-	
-	
-	/*Nota item Produto, associar*/
+
+	/* Nota item Produto, associar */
 	@Column(nullable = false)
-	private Double peso; /*1000,55 */
-	
+	private Double peso; /* 1000,55 */
+
 	@Column(nullable = false)
 	private Double largura;
-	
+
 	@Column(nullable = false)
 	private Double profundidade;
-	
+
 	@Column(nullable = false)
 	private BigDecimal valorVenda = BigDecimal.ZERO;
-	
+
 	@Column(nullable = false)
 	private Integer QtdEstoque = 0;
-	
+
 	private Integer QtdAlertaEstoque = 0;
-	
+
 	private String linkYoutube;
-	
+
 	private Boolean alertaQtaEstoque = Boolean.FALSE;
-	
+
 	private Integer qtdeClique = 0;
 
 	public Long getId() {
@@ -192,9 +192,5 @@ public class Produto implements Serializable {
 		Produto other = (Produto) obj;
 		return Objects.equals(id, other.id);
 	}
-	
-	
-	
-	
 
 }
