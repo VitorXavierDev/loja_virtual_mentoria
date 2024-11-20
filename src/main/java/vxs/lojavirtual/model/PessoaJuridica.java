@@ -7,7 +7,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "pessoa_juridica")
-@PrimaryKeyJoinColumn(name = "id")
+//@PrimaryKeyJoinColumn(name = "id")
 public class PessoaJuridica extends Pessoa {
 
 	private static final long serialVersionUID = 1L;

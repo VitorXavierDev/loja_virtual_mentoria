@@ -11,7 +11,7 @@ import jakarta.persistence.TemporalType;
 
 @Entity
 @Table(name = "pessoa_fisica")
-@PrimaryKeyJoinColumn(name = "id")
+//@PrimaryKeyJoinColumn(name = "id")
 public class PessoaFisica extends Pessoa {
 
 	private static final long serialVersionUID = 1L;
