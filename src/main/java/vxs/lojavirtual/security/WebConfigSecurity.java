@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import jakarta.servlet.http.HttpSessionListener;
 
@@ -18,21 +19,17 @@ import jakarta.servlet.http.HttpSessionListener;
 @EnableMethodSecurity
 public class WebConfigSecurity implements HttpSessionListener{
 
-	/*public void configure(WebSecurity web) throws Exception {
-		web.ignoring().requestMatchers(HttpMethod.GET, "/salvarAcesso")
-		.requestMatchers(HttpMethod.POST, "/salvarAcesso");
-		//ignorando url para não autenticar
-	}*/
-
 	
 	  @Bean
 	  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 	    
 		  http
+		  		//.csrf(csrf -> csrf.disable())
 	            .authorizeHttpRequests(( (authorize) -> authorize
-	                .requestMatchers(HttpMethod.GET, "/salvarAcesso").permitAll()
-	                .requestMatchers(HttpMethod.POST, "/salvarAcesso").permitAll()
-	            .anyRequest().authenticated())
+	               .requestMatchers(HttpMethod.GET, "/salvarAcesso", "/deleteAcesso").permitAll()
+	              .requestMatchers(HttpMethod.POST, "/salvarAcesso", "/deleteAcesso").permitAll()
+	            .anyRequest().permitAll())
+	            		
 	            );
 	        return http.build();
 	  } 	     

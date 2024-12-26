@@ -4,6 +4,8 @@ import java.util.Objects;
 
 import org.springframework.security.core.GrantedAuthority;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,6 +28,8 @@ public class Acesso implements GrantedAuthority {
 	@Column(nullable = false)
 	private String descricao; // acesso ex: ROLE_ADMIN ou ROLE_SECRETARIO
 	
+	@JsonIgnore
+	@Override
 	public String getAuthority() {
 
 		return this.descricao;
