@@ -68,5 +68,10 @@ public class Acesso implements GrantedAuthority {
 		return Objects.equals(id, other.id);
 	}
 
+	public String getRole() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	
 }

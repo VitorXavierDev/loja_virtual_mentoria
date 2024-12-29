@@ -3,8 +3,10 @@ package vxs.lojavirtual.model;
 import java.sql.Date;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Column;
@@ -64,7 +66,12 @@ public class Usuario implements UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		
-		return this.acessos;
+		
+		return acessos;
+		//return acessos.stream()
+          //      .map(acesso -> new SimpleGrantedAuthority(acesso.getRole()))  // Aqui 'getRole' assume que Acesso tem um campo 'role'
+            //    .collect(Collectors.toList());
+		//return this.acessos;
 	}
 
 	/*Autoridades = São os acesso, ou seja ROLE_ADMIN, ROLE_AUXILIAR, ROLE_FINANCEIRO*/
@@ -113,6 +120,44 @@ public class Usuario implements UserDetails {
 		return true;
 	}
 	
+	public String getLogin() {
+		return login;
+	}
+	public void setLogin(String login) {
+		this.login = login;
+	}
+	
+	public String getSenha() {
+		return senha;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Date getDataAtualSenha() {
+		return dataAtualSenha;
+	}
+
+	public void setDataAtualSenha(Date dataAtualSenha) {
+		this.dataAtualSenha = dataAtualSenha;
+	}
+
+	public List<Acesso> getAcessos() {
+		return acessos;
+	}
+
+	public void setAcessos(List<Acesso> acessos) {
+		this.acessos = acessos;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
 	
 
 }
