@@ -12,9 +12,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import jakarta.servlet.http.HttpSessionListener;
 import vxs.lojavirtual.service.ImplementacaoUserDetailsService;
@@ -25,8 +28,11 @@ public class WebConfigSecurity implements HttpSessionListener {
 
 	@Autowired
 	private ImplementacaoUserDetailsService implementacaoUserDetailsService;
+	
+	private final JWTTokenAutenticacaoService jwtTokenService;
 
-	public WebConfigSecurity(ImplementacaoUserDetailsService implementacaoUserDetailsService) {
+	public WebConfigSecurity(JWTTokenAutenticacaoService jwtTokenService, ImplementacaoUserDetailsService implementacaoUserDetailsService) {
+		this.jwtTokenService = jwtTokenService;
 		this.implementacaoUserDetailsService = implementacaoUserDetailsService;
 
 	}
@@ -43,24 +49,37 @@ public class WebConfigSecurity implements HttpSessionListener {
 		// Retorna o AuthenticationManager configurado
 		return authenticationManagerBuilder.getOrBuild();
 	}
+	
+	
 
-	private PasswordEncoder passwordEncoder() {
-		// TODO Auto-generated method stub
-		return null;
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-		http
-				// .csrf(csrf -> csrf.disable())
-				.authorizeHttpRequests(
-						((authorize) -> authorize.requestMatchers(HttpMethod.GET, "/salvarAcesso", "/deleteAcesso")
-								.permitAll().requestMatchers(HttpMethod.POST, "/salvarAcesso", "/deleteAcesso")
-								.permitAll().anyRequest().permitAll())
+		AuthenticationManager authManager = authenticationManager(http);
+		
+		   http.csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).disable())
+           .authorizeHttpRequests(auth -> auth
+               .requestMatchers("/", "/index", "/login").permitAll()
+               .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+               .anyRequest().authenticated()
+           )
+           .exceptionHandling(exception -> exception
+                   .authenticationEntryPoint(new CustomAuthenticationEntryPoint()) // Handler 401
+                   .accessDeniedHandler(new CustomAccessDeniedHandler()) // Handler 403
+               )
+           .logout(logout -> logout
+               .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+               .logoutSuccessUrl("/index")
+           )
+           .addFilterAfter(new JWTLoginFilter("/login", authManager, jwtTokenService), UsernamePasswordAuthenticationFilter.class)
+           .addFilterBefore(new JwtApiAutenticacaoFilter(jwtTokenService), UsernamePasswordAuthenticationFilter.class);
 
-				);
-		return http.build();
+       return http.build();
 	}
 
 }
