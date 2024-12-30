@@ -1,4 +1,4 @@
-package vxs.lojavirtual.security;
+package vxs.lojavirtual.expections;
 
 import java.io.IOException;
 

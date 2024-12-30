@@ -3,9 +3,11 @@ package vxs.lojavirtual.security;
 import java.io.IOException;
 
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
@@ -56,5 +58,27 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 				e.printStackTrace();
 			}
 	    }
+	 
+	 @Override
+	protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+			AuthenticationException failed) throws IOException, ServletException {
+		
+		 response.setContentType("application/json");
+		    response.setCharacterEncoding("UTF-8");
+
+		    if (failed instanceof BadCredentialsException) {
+		        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		        response.getWriter().write("{\"error\": \"Credenciais inválidas\", \"message\": \"Usuário ou senha estão incorretos.\"}");
+		    } else if (failed instanceof UsernameNotFoundException) {
+		        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		        response.getWriter().write("{\"error\": \"Usuário não encontrado\", \"message\": \"O usuário fornecido não existe.\"}");
+		    } else {
+		        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+		        response.getWriter().write("{\"error\": \"Erro de autenticação\", \"message\": \"" + failed.getMessage() + "\"}");
+		    }
+
+		    // Log para o servidor
+		    logger.error("Erro de autenticação: " + failed.getMessage(), failed);
+	}
 
 }

@@ -20,6 +20,8 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import jakarta.servlet.http.HttpSessionListener;
+import vxs.lojavirtual.expections.CustomAccessDeniedHandler;
+import vxs.lojavirtual.expections.CustomAuthenticationEntryPoint;
 import vxs.lojavirtual.service.ImplementacaoUserDetailsService;
 
 @Configuration

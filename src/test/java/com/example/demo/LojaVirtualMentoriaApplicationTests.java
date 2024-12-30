@@ -21,6 +21,7 @@ import junit.framework.TestCase;
 import vxs.lojavirtual.aplication.LojaVirtualMentoriaAplication;
 import vxs.lojavirtual.controller.AcessoController;
 import vxs.lojavirtual.model.Acesso;
+import vxs.lojavirtual.model.dto.ObjetoErroDTO;
 import vxs.lojavirtual.repository.AcessoRepository;
 import vxs.lojavirtual.service.AcessoService;
 
@@ -201,6 +202,16 @@ class LojaVirtualMentoriaApplicationTests extends TestCase {
 		acessoRepository.deleteById(acesso.getId());
 	
 	}
+	
+		@Test
+		public void TestObjetoErroDTO() {
+			ObjetoErroDTO dto = new ObjetoErroDTO();
+	        dto.setCode("500");
+	        dto.setError("Internal Server Error");
+
+	        System.out.println("Code: " + dto.getCode());
+	        System.out.println("Error: " + dto.getError());
+		}
 	
 	@Test
 	public void testeCadastraAcesso() {

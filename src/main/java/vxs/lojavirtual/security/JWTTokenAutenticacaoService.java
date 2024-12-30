@@ -1,6 +1,8 @@
 package vxs.lojavirtual.security;
 
+import java.io.IOException;
 import java.security.Key;
+import java.security.SignatureException;
 import java.util.Date;
 
 import javax.crypto.SecretKey;
@@ -12,12 +14,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import vxs.lojavirtual.aplication.ApplicationContextLoad;
+import vxs.lojavirtual.expections.TokenExpiredException;
+import vxs.lojavirtual.expections.TokenValidationException;
 import vxs.lojavirtual.model.Usuario;
 import vxs.lojavirtual.repository.UsuarioRepository;
 
@@ -70,7 +75,7 @@ public class JWTTokenAutenticacaoService {
 
 	/* Retorna o usuário validado com token ou caso nao seja valido retona null */
 	public org.springframework.security.core.Authentication getAuthetication(HttpServletRequest request,
-			HttpServletResponse response) {
+			HttpServletResponse response) throws IOException {
 
 		String token = request.getHeader(HEADER_STRING);
 
@@ -99,14 +104,29 @@ public class JWTTokenAutenticacaoService {
 				}
 			} else {
 				 throw new IllegalArgumentException("Token não fornecido ou formato inválido.");
-			}
+			} 
 
-		} catch (Exception e) {
-			throw new RuntimeException("Erro na autenticação: " + e.getMessage(), e);
-			
-		}
-	
+		}  catch (ExpiredJwtException e) {
+            handleException(response, "Token expirado: " + e.getMessage(), HttpServletResponse.SC_UNAUTHORIZED);
+            throw new TokenExpiredException("Token expirado: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            handleException(response, "Erro no token: " + e.getMessage(), HttpServletResponse.SC_BAD_REQUEST);
+            throw new TokenValidationException("Erro no token: " + e.getMessage());
+        } catch (Exception e) {
+            handleException(response, "Erro ao validar o token: " + e.getMessage(), HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            throw new TokenValidationException("Erro ao validar o token: " + e.getMessage());
+        }	
 	}
+	
+	  private void handleException(HttpServletResponse response, String message, int statusCode) throws IOException {
+	        response.setStatus(statusCode);
+	        response.setContentType("application/json");
+	        response.getWriter().write("{\"error\": \"" + message + "\"}");
+	        response.getWriter().flush();
+	    }
+		
+	
+
 
 
 	/* Fazendo liberação contra erro de COrs no navegador */
