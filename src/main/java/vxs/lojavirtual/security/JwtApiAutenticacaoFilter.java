@@ -11,44 +11,54 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-public class JwtApiAutenticacaoFilter extends OncePerRequestFilter{
+public class JwtApiAutenticacaoFilter extends OncePerRequestFilter {
 
 	private final JWTTokenAutenticacaoService jwtService;
 
-    public JwtApiAutenticacaoFilter(JWTTokenAutenticacaoService jwtService) {
-        this.jwtService = jwtService;
-    }
-    
+	public JwtApiAutenticacaoFilter(JWTTokenAutenticacaoService jwtService) {
+		this.jwtService = jwtService;
+	}
+
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		
-		
-		  // Ignorar a rota /login
-	    if ("/login".equals(request.getRequestURI())) {
-	        filterChain.doFilter(request, response);
-	        return;
-	    }
-	    
-	    String token = request.getHeader("Authorization");
-	    
-	    if (token == null || !token.startsWith("Bearer ")) {
-	        filterChain.doFilter(request, response); // Continua sem autenticar
-	        return;
-	    }
-	    
-	    String tokenLimpo = token.replace("Bearer ", "").trim();
-		
-		  Authentication authentication = jwtService.getAuthetication(request, response);
 
-	        // Define a autenticação no contexto do Spring Security
-	        if (authentication != null) {
-	            SecurityContextHolder.getContext().setAuthentication(authentication);
-	        }
+		try {
+			// Ignorar a rota /login
+			if ("/login".equals(request.getRequestURI())) {
+				filterChain.doFilter(request, response);
+				return;
+			}
 
-	        // Prossegue com o restante do filtro
-	        filterChain.doFilter(request, response);
-		
+			String token = request.getHeader("Authorization");
+
+			if (token == null || !token.startsWith("Bearer ")) {
+				filterChain.doFilter(request, response); // Continua sem autenticar
+				return;
+			}
+
+			String tokenLimpo = token.replace("Bearer ", "").trim();
+
+			Authentication authentication = jwtService.getAuthetication(request, response);
+
+			// Define a autenticação no contexto do Spring Security
+			if (authentication != null) {
+				SecurityContextHolder.getContext().setAuthentication(authentication);
+			}
+
+			// Prossegue com o restante do filtro
+			filterChain.doFilter(request, response);
+
+		} catch (Exception e) {
+			// Logar a exceção com detalhes
+			logger.error("Erro durante a autenticação do token JWT", e);
+
+			// Configurar a resposta com status 401 (Unauthorized)
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			response.getWriter().write("Erro na autenticação: " + e.getMessage());
+			response.getWriter().flush();
+
+		}
 	}
 
 }

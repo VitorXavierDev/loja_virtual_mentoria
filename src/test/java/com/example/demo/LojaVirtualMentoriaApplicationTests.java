@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import java.awt.PageAttributes.MediaType;
+import java.util.Calendar;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,7 @@ import vxs.lojavirtual.model.dto.ObjetoErroDTO;
 import vxs.lojavirtual.repository.AcessoRepository;
 import vxs.lojavirtual.service.AcessoService;
 
-@Profile("test")
+@Profile("dev")
 @SpringBootTest(classes = LojaVirtualMentoriaAplication.class)
 class LojaVirtualMentoriaApplicationTests extends TestCase {
 
@@ -50,7 +51,7 @@ class LojaVirtualMentoriaApplicationTests extends TestCase {
 		
 		Acesso acesso = new Acesso();
 		
-		acesso.setDescricao("ROLE_COMPRADOR");
+		acesso.setDescricao("ROLE_COMPRADOR" + Calendar.getInstance().getTimeInMillis());
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		
@@ -218,7 +219,9 @@ class LojaVirtualMentoriaApplicationTests extends TestCase {
 		
 		Acesso acesso = new Acesso();
 		
-		acesso.setDescricao("ROLE_ADMIN");
+		String descricao = "ROLE_ADMIN" + Calendar.getInstance().getTimeInMillis();
+		
+		acesso.setDescricao(descricao);
 		
 		assertEquals(true, acesso.getId() == null);
 		
@@ -228,7 +231,7 @@ class LojaVirtualMentoriaApplicationTests extends TestCase {
 		assertEquals(true, acesso.getId() > 0);
 		
 		/*validar dados salvos da forma correta*/
-		assertEquals("ROLE_ADMIN", acesso.getDescricao());
+		assertEquals(descricao, acesso.getDescricao());
 		
 		/*Teste de carregamento*/
 		

@@ -5,12 +5,16 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
@@ -63,6 +67,27 @@ public class Produto implements Serializable {
 	private Boolean alertaQtaEstoque = Boolean.FALSE;
 
 	private Integer qtdeClique = 0;
+	
+	@ManyToOne(targetEntity = Pessoa.class)
+	@JoinColumn(name = "empresa_id", nullable = false, 
+	foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
+	private Pessoa empresa_id;
+
+	public Double getAltura() {
+		return altura;
+	}
+
+	public void setAltura(Double altura) {
+		this.altura = altura;
+	}
+
+	public Pessoa getEmpresa_id() {
+		return empresa_id;
+	}
+
+	public void setEmpresa_id(Pessoa empresa_id) {
+		this.empresa_id = empresa_id;
+	}
 
 	public Long getId() {
 		return id;

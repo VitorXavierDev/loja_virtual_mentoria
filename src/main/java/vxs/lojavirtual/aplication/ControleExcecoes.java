@@ -18,66 +18,76 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import vxs.lojavirtual.expections.ExceptionMentoriaJava;
 import vxs.lojavirtual.model.dto.ObjetoErroDTO;
 
 @RestControllerAdvice
 @ControllerAdvice
 public class ControleExcecoes extends ResponseEntityExceptionHandler {
 
-	
-	
-	 /*
-      Tratamento de exceções genéricas.
-     */
-    @ExceptionHandler({ Exception.class, RuntimeException.class, Throwable.class })
-    protected ResponseEntity<Object> handleGenericException(Exception ex, WebRequest request) {
-        ObjetoErroDTO errorResponse = new ObjetoErroDTO();
-        errorResponse.setError("Ocorreu um erro interno: " + ex.getMessage());
-        errorResponse.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value() + " - " + HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
+	@ExceptionHandler(ExceptionMentoriaJava.class)
+	public ResponseEntity<Object> handleExceptionCustom(ExceptionMentoriaJava ex) {
 
-        
+		ObjetoErroDTO objetoErroDTO = new ObjetoErroDTO();
 
-        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-    
-    @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+		objetoErroDTO.setError(ex.getMessage());
+		objetoErroDTO.setCode(HttpStatus.OK.toString());
 
-        ObjetoErroDTO objetoErroDTO = new ObjetoErroDTO();
-        StringBuilder msg = new StringBuilder();
+		return new ResponseEntity<Object>(objetoErroDTO, HttpStatus.OK);
 
-        List<ObjectError> errors = ex.getBindingResult().getAllErrors();
-        for (ObjectError error : errors) {
-            msg.append(error.getDefaultMessage()).append("\n");
-        }
+	}
 
-        objetoErroDTO.setError(msg.toString());
-        objetoErroDTO.setCode("Status code: " + status.value());
-        return new ResponseEntity<>(objetoErroDTO, headers, status);
-    }
-    
-    @ExceptionHandler({ DataIntegrityViolationException.class, ConstraintViolationException.class, SQLException.class })
-    public ResponseEntity<Object> handleDatabaseExceptions(Exception ex) {
-        ObjetoErroDTO objetoErroDTO = new ObjetoErroDTO();
-        objetoErroDTO.setError("Erro relacionado ao banco de dados: " + ex.getMessage());
-        objetoErroDTO.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value() + " ==> " + HttpStatus.INTERNAL_SERVER_ERROR);
-        return new ResponseEntity<>(objetoErroDTO, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-   
-   @Override
-    protected ResponseEntity<Object> handleBindException(
-            BindException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        ObjetoErroDTO objetoErroDTO = new ObjetoErroDTO();
-        StringBuilder msg = new StringBuilder();
+	/*
+	 * Tratamento de exceções genéricas.
+	 */
+	@ExceptionHandler({ Exception.class, RuntimeException.class, Throwable.class })
+	protected ResponseEntity<Object> handleGenericException(Exception ex, WebRequest request) {
+		ObjetoErroDTO errorResponse = new ObjetoErroDTO();
+		errorResponse.setError("Ocorreu um erro interno: " + ex.getMessage());
+		errorResponse.setCode(
+				HttpStatus.INTERNAL_SERVER_ERROR.value() + " - " + HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
 
-        List<ObjectError> errors = ex.getBindingResult().getAllErrors();
-        for (ObjectError error : errors) {
-            msg.append(error.getDefaultMessage()).append("\n");
-        }
+		return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 
-        objetoErroDTO.setError(msg.toString());
-        objetoErroDTO.setCode("Status code: " + status.value());
-        return new ResponseEntity<>(objetoErroDTO, headers, status);
-    }
+	@Override
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+			HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+
+		ObjetoErroDTO objetoErroDTO = new ObjetoErroDTO();
+		StringBuilder msg = new StringBuilder();
+
+		List<ObjectError> errors = ex.getBindingResult().getAllErrors();
+		for (ObjectError error : errors) {
+			msg.append(error.getDefaultMessage()).append("\n");
+		}
+
+		objetoErroDTO.setError(msg.toString());
+		objetoErroDTO.setCode("Status code: " + status.value());
+		return new ResponseEntity<>(objetoErroDTO, headers, status);
+	}
+
+	@ExceptionHandler({ DataIntegrityViolationException.class, ConstraintViolationException.class, SQLException.class })
+	public ResponseEntity<Object> handleDatabaseExceptions(Exception ex) {
+		ObjetoErroDTO objetoErroDTO = new ObjetoErroDTO();
+		objetoErroDTO.setError("Erro relacionado ao banco de dados: " + ex.getMessage());
+		objetoErroDTO.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value() + " ==> " + HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(objetoErroDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	@Override
+	protected ResponseEntity<Object> handleBindException(BindException ex, HttpHeaders headers, HttpStatusCode status,
+			WebRequest request) {
+		ObjetoErroDTO objetoErroDTO = new ObjetoErroDTO();
+		StringBuilder msg = new StringBuilder();
+
+		List<ObjectError> errors = ex.getBindingResult().getAllErrors();
+		for (ObjectError error : errors) {
+			msg.append(error.getDefaultMessage()).append("\n");
+		}
+
+		objetoErroDTO.setError(msg.toString());
+		objetoErroDTO.setCode("Status code: " + status.value());
+		return new ResponseEntity<>(objetoErroDTO, headers, status);
+	}
 }

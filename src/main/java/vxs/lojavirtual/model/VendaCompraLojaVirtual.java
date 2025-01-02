@@ -61,6 +61,21 @@ public class VendaCompraLojaVirtual implements Serializable {
 	@JoinColumn(name = "cupom_desc_id", foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "cupom_desc_fk"))
 	private CupDesc cupDesc;
 
+	
+	@ManyToOne(targetEntity = Pessoa.class)
+	@JoinColumn(name = "empresa_id", nullable = false, 
+	foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
+	private Pessoa empresa_id;
+	
+	
+	public Pessoa getEmpresa_id() {
+		return empresa_id;
+	}
+
+	public void setEmpresa_id(Pessoa empresa_id) {
+		this.empresa_id = empresa_id;
+	}
+
 	@Column(nullable = false)
 	private BigDecimal valorFret;
 

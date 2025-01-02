@@ -1102,8 +1102,8 @@ ALTER TABLE ONLY public.acesso
 -- Name: avaliacao_produto avaliacao_produto_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.avaliacao_produto
-    ADD CONSTRAINT avaliacao_produto_pkey PRIMARY KEY (id);
+	ALTER TABLE ONLY public.avaliacao_produto
+	    ADD CONSTRAINT avaliacao_produto_pkey PRIMARY KEY (id);
 
 
 --

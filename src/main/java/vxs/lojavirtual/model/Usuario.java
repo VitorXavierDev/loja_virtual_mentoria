@@ -38,7 +38,7 @@ public class Usuario implements UserDetails {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_usuario")
 	private Long id;
 	
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String login;
 	
 	@Column(nullable = false)
@@ -63,6 +63,21 @@ public class Usuario implements UserDetails {
 	foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "pessoa_fk"))
 	private Pessoa pessoa;
 	
+	@ManyToOne(targetEntity = Pessoa.class)
+	@JoinColumn(name = "empresa_id", nullable = false, 
+	foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
+	private Pessoa empresa_id;
+	
+	
+	
+	public Pessoa getEmpresa_id() {
+		return empresa_id;
+	}
+
+	public void setEmpresa_id(Pessoa empresa_id) {
+		this.empresa_id = empresa_id;
+	}
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		
