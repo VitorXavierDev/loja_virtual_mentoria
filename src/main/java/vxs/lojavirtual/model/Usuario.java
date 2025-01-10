@@ -1,6 +1,6 @@
 package vxs.lojavirtual.model;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
