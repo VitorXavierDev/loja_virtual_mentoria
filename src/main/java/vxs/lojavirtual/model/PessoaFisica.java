@@ -2,6 +2,8 @@ package vxs.lojavirtual.model;
 
 import java.sql.Date;
 
+import org.hibernate.validator.constraints.br.CPF;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrimaryKeyJoinColumn;
@@ -16,7 +18,7 @@ public class PessoaFisica extends Pessoa {
 
 	private static final long serialVersionUID = 1L;
 
-	
+	@CPF(message = "CPF está inválido")
 	@Column(nullable = false)
 	private String cpf;
 	

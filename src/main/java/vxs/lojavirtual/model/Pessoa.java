@@ -40,7 +40,7 @@ public abstract class Pessoa implements Serializable {
 	private String tipoPessoa;
 	
 	@Size(min = 4, message = "O nome deve ter no minimo 4 letras")
-	@NotBlank(message = "Nome deve ser informado")
+	@NotBlank(message = "Nome deve ser informadoo")
 	@NotNull(message = "Nome deve ser informado")
 	@Column(nullable = false)
 	private String nome;
