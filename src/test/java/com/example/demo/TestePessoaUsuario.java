@@ -34,11 +34,11 @@ public class TestePessoaUsuario extends TestCase {
 		
 		PessoaJuridica pessoaJuridica = new PessoaJuridica();
 		
-		pessoaJuridica.setCnpj("" + Calendar.getInstance().getTimeInMillis());
+		pessoaJuridica.setCnpj("56.352.542/0001-88");
 		pessoaJuridica.setNome("Vitor Xavier");
 		pessoaJuridica.setEmail("vitorxavier6677@gmail.com");
 		pessoaJuridica.setTelefone("46999011022");
-		pessoaJuridica.setInscEstadual("3949394");
+		pessoaJuridica.setInscEstadual("3942494");
 		pessoaJuridica.setInscMunicipal("3141242123");
 		pessoaJuridica.setNomeFantasia("vxs informatica");
 		pessoaJuridica.setRazaoSocial("Vitor Xavier Mei");
@@ -92,7 +92,7 @@ public class TestePessoaUsuario extends TestCase {
 		
 		PessoaFisica pessoaFisica = new PessoaFisica();
 		
-		pessoaFisica.setCpf("10869800426");
+		pessoaFisica.setCpf("713.482.980-49");
 		pessoaFisica.setNome("Vitor Xavier");
 		pessoaFisica.setEmail("vitorxavier@gmail.com");
 		pessoaFisica.setTelefone("46999011022");

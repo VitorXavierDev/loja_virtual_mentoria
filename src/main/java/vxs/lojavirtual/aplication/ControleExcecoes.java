@@ -54,6 +54,7 @@ public class ControleExcecoes extends ResponseEntityExceptionHandler {
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 
+		
 		ObjetoErroDTO objetoErroDTO = new ObjetoErroDTO();
 		StringBuilder msg = new StringBuilder();
 
@@ -66,6 +67,8 @@ public class ControleExcecoes extends ResponseEntityExceptionHandler {
 		objetoErroDTO.setCode("Status code: " + status.value());
 		return new ResponseEntity<>(objetoErroDTO, headers, status);
 	}
+	
+	
 
 	@ExceptionHandler({ DataIntegrityViolationException.class, ConstraintViolationException.class, SQLException.class })
 	public ResponseEntity<Object> handleDatabaseExceptions(Exception ex) {

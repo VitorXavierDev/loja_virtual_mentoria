@@ -3,11 +3,13 @@ package vxs.lojavirtual.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import vxs.lojavirtual.expections.ExceptionMentoriaJava;
 import vxs.lojavirtual.model.PessoaFisica;
 import vxs.lojavirtual.model.PessoaJuridica;
@@ -29,7 +31,7 @@ public class PessoaController {
 	
 	@ResponseBody
 	@PostMapping(value = "/salvarPj")
-	public ResponseEntity<PessoaJuridica> salvarPj (@RequestBody PessoaJuridica pessoaJuridica){
+	public ResponseEntity<PessoaJuridica> salvarPj (@RequestBody @Valid PessoaJuridica pessoaJuridica){
 		
 		if (pessoaJuridica == null) {
 			throw new ExceptionMentoriaJava("Pessoa Juridica não pode ser NULL");
