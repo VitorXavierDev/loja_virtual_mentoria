@@ -1,9 +1,12 @@
 package vxs.lojavirtual.aplication;
 
+import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -18,12 +21,17 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import jakarta.mail.MessagingException;
 import vxs.lojavirtual.expections.ExceptionMentoriaJava;
 import vxs.lojavirtual.model.dto.ObjetoErroDTO;
+import vxs.lojavirtual.service.ServiceSendEmail;
 
 @RestControllerAdvice
 @ControllerAdvice
 public class ControleExcecoes extends ResponseEntityExceptionHandler {
+	
+	@Autowired
+	private ServiceSendEmail serviceSendEmail;
 
 	@ExceptionHandler(ExceptionMentoriaJava.class)
 	public ResponseEntity<Object> handleExceptionCustom(ExceptionMentoriaJava ex) {
@@ -46,6 +54,13 @@ public class ControleExcecoes extends ResponseEntityExceptionHandler {
 		errorResponse.setError("Ocorreu um erro interno: " + ex.getMessage());
 		errorResponse.setCode(
 				HttpStatus.INTERNAL_SERVER_ERROR.value() + " - " + HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
+		try {
+			serviceSendEmail.enviarEmailHtml("Erro na loja virtual	", ExceptionUtils.getStackTrace(ex) , "vxs.dev@gmail.com");
+		} catch (UnsupportedEncodingException | MessagingException e) {
+			
+			e.printStackTrace();
+		}
+		
 
 		return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
@@ -75,6 +90,7 @@ public class ControleExcecoes extends ResponseEntityExceptionHandler {
 		ObjetoErroDTO objetoErroDTO = new ObjetoErroDTO();
 		objetoErroDTO.setError("Erro relacionado ao banco de dados: " + ex.getMessage());
 		objetoErroDTO.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value() + " ==> " + HttpStatus.INTERNAL_SERVER_ERROR);
+		
 		return new ResponseEntity<>(objetoErroDTO, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 

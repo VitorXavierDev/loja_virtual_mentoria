@@ -110,7 +110,7 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.sun.mail</groupId>
+			<groupId>com.sun.mail</groupId>	
 			<artifactId>jakarta.mail</artifactId>
 			<version>2.0.1</version>
 		</dependency>
@@ -119,6 +119,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
 			<version>3.3.6</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.17.0</version>
 		</dependency>
 
 	</dependencies>
