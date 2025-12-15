@@ -17,6 +17,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "produto")
@@ -32,6 +33,7 @@ public class Produto implements Serializable {
 	@Column(nullable = false)
 	private String tipoUnidade;
 
+	@NotNull(message = "Nome do produto deve ser informado")
 	@Column(nullable = false)
 	private String nome;
 
